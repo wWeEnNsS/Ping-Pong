@@ -1,3 +1,3 @@
-# Learn Git And GitHub and I work for game is Ping-Pong
+# Ping-Pong on C
 
-Git
+My First game is console ping-pong on C
