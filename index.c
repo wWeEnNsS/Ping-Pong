@@ -55,10 +55,25 @@ void ShowMap()
     }
 }
 
+void moveRacket(TRacket* racket, int x)
+{
+    (*racket).x = x;
+    if ((*racket).x < 1)
+    {
+        (*racket).x = 1;
+    }
+    if ((*racket).x >= mapWidth)
+    {
+        (*racket).x = mapWidth - 1 - (*racket).w;
+    }
+}
+
 int main()
 {
 
     InitRacket(&racket);
+
+    moveRacket(&racket, -2);
 
     ClearMap();
 
