@@ -1,5 +1,7 @@
 #include <stdio.h>
-
+#include <conio.h>
+#include <windows.h>
+#include <string.h>
 #define mapWidth 65
 #define mapHeight 25
 
@@ -51,34 +53,56 @@ void ShowMap()
   //mas[mapHeight-1][mapWidth-1] = '\0';
     for (int i = 0; i < mapHeight; i++)
     {
-        printf("%s\n", mas[i]);
+        printf("%s", mas[i]);
+        if (i < mapHeight - 1)
+        {
+            printf("\n");
+        }
     }
 }
 
-void moveRacket(TRacket* racket, int x)
+void moveRacket(int xP)
 {
-    (*racket).x = x;
-    if ((*racket).x < 1)
+    racket.x = xP;
+    if (racket.x < 1)
     {
-        (*racket).x = 1;
+        racket.x = 1;
     }
-    if ((*racket).x >= mapWidth)
+    if (racket.x + racket.w >= mapWidth)
     {
-        (*racket).x = mapWidth - 1 - (*racket).w;
+        racket.x = mapWidth - 1 - racket.w;
     }
+}
+
+void setcur(int x, int y)
+{
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 int main()
 {
-
     InitRacket(&racket);
+    do
+    {
+         setcur(0, 0);
+         ClearMap();
 
-    moveRacket(&racket, -2);
+         PutRacket(&racket);
 
-    ClearMap();
+         ShowMap();
 
-    PutRacket(&racket);
+         if (GetKeyState('A') < 0)
+         {
+             moveRacket(racket.x - 1);
+         }
+         if (GetKeyState('D') < 0)
+         {
+             moveRacket(racket.x + 1);
+         }
 
-    ShowMap();
+    } while(GetKeyState(VK_ESCAPE) >= 0);
     return 0;
 }
