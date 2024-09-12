@@ -12,19 +12,29 @@ typedef struct sRacket{
     int w;
 }TRacket;
 
-TRacket racket;
-void InitRacket(TRacket* racket)
+TRacket racket1Player;
+TRacket racket2Player;
+
+void InitRacket(TRacket* racket1Player, TRacket* racket2Player)
 {
-    (*racket).w = 7; // width racket
-    (*racket).x = (mapWidth - (*racket).w) / 2; // помешение ракетки в карту
-    (*racket).y = mapHeight - 1;
+    (*racket1Player).w = 7; // width racket
+    (*racket1Player).x = (mapWidth - (*racket1Player).w) / 2; // помешение ракетки в карту
+    (*racket1Player).y = mapHeight - 1;
+    (*racket2Player).w = 7;
+    (*racket2Player).x = (mapWidth - (*racket2Player).w) / 2;
+    (*racket2Player).y = mapHeight - 24;
 }
 
-void PutRacket(TRacket* racket)
+void PutRacket(TRacket* racket1Player, TRacket* racket2Player)
 {
-    for(int i = (*racket).x; i < (*racket).x + (*racket).w; i++)
+    for(int i = (*racket1Player).x; i < (*racket1Player).x + (*racket1Player).w; i++)
     {
-        mas[(*racket).y][i] = '=';
+        mas[(*racket1Player).y][i] = '=';
+    }
+
+    for (int i = (*racket2Player).x; i < (*racket2Player).x + (*racket2Player).w; i++)
+    {
+        mas[(*racket2Player).y][i] = '=';
     }
 }
 
@@ -50,6 +60,7 @@ void ClearMap()
 
 void ShowMap()
 {
+    printf("\n");
   //mas[mapHeight-1][mapWidth-1] = '\0';
     for (int i = 0; i < mapHeight; i++)
     {
@@ -61,16 +72,30 @@ void ShowMap()
     }
 }
 
-void moveRacket(int xP)
+void moveRacketFor1Player(int xP)
 {
-    racket.x = xP;
-    if (racket.x < 1)
+    racket1Player.x = xP;
+    if (racket1Player.x < 1)
     {
-        racket.x = 1;
+        racket1Player.x = 1;
     }
-    if (racket.x + racket.w >= mapWidth)
+    if (racket1Player.x + racket1Player.w >= mapWidth)
     {
-        racket.x = mapWidth - 1 - racket.w;
+        racket1Player.x = mapWidth - 1 - racket1Player.w;
+    }
+
+}
+
+void moveRacketFor2Player(int xP)
+{
+    racket2Player.x = xP;
+    if (racket2Player.x < 1)
+    {
+        racket2Player.x = 1;
+    }
+    if (racket2Player.x + racket2Player.w >= mapWidth)
+    {
+        racket2Player.x = mapWidth - 1 - racket2Player.w;
     }
 }
 
@@ -84,25 +109,33 @@ void setcur(int x, int y)
 
 int main()
 {
-    InitRacket(&racket);
+    InitRacket(&racket1Player, &racket2Player);
     do
     {
          setcur(0, 0);
          ClearMap();
 
-         PutRacket(&racket);
+         PutRacket(&racket1Player, &racket2Player);
 
          ShowMap();
 
          if (GetKeyState('A') < 0)
          {
-             moveRacket(racket.x - 1);
-         }
-         if (GetKeyState('D') < 0)
+             moveRacketFor1Player(racket1Player.x - 1);
+         }else if (GetKeyState('D') < 0)
          {
-             moveRacket(racket.x + 1);
+             moveRacketFor1Player(racket1Player.x + 1);
          }
 
+         if (GetKeyState('J') < 0)
+         {
+             moveRacketFor2Player(racket2Player.x - 1);
+         }else if (GetKeyState('L') < 0)
+         {
+             moveRacketFor2Player(racket2Player.x + 1);
+         }
+
+         Sleep(10);
     } while(GetKeyState(VK_ESCAPE) >= 0);
     return 0;
 }
