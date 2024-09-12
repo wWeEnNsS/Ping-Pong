@@ -22,10 +22,8 @@ typedef struct sBall{
 
 TRacket racket1Player;
 TRacket racket2Player;
-TBall ball;
-int hitCnt = 0;
-int maxHitCnt = 0;
 
+TBall ball;
 
 void initBall(TBall* ball)
 {
@@ -64,12 +62,6 @@ void AutoMoveBall()
              ,ball.y + sin(ball.alfa) * ball.speed);
     if ((mas[ball.iy][ball.ix] == '#') || (mas[ball.iy][ball.ix] == '='))
     {
-
-        if (mas[ball.iy][ball.ix] == '=')
-        {
-            hitCnt++;
-        }
-
         if ((ball.ix != bl.ix) && (ball.iy != bl.iy))
         {
             if (mas[bl.iy][ball.ix] == mas[ball.iy][bl.ix])
@@ -92,8 +84,6 @@ void AutoMoveBall()
         {
             bl.alfa = (2*M_PI - bl.alfa);
         }
-        ball = bl;
-        AutoMoveBall();
     }
 }
 
@@ -147,14 +137,6 @@ void ShowMap()
     for (int i = 0; i < mapHeight; i++)
     {
         printf("%s", mas[i]);
-        if (i == 3)
-        {
-            printf("   hit %i    ", hitCnt);
-        }
-        if (i == 4)
-        {
-            printf("   max %i    ", maxHitCnt);
-        }
         if (i < mapHeight - 1)
         {
             printf("\n");
@@ -210,15 +192,6 @@ int main()
          {
              AutoMoveBall();
          }
-         if (ball.iy > mapHeight)
-         {
-             run = FALSE;
-             if (hitCnt > maxHitCnt)
-             {
-                 maxHitCnt = hitCnt;
-             }
-             hitCnt = 0;
-         }
 
          ClearMap();
 
@@ -241,7 +214,7 @@ int main()
          {
              moveRacketFor2Player(racket2Player.x + 1);
          }
-         if (GetKeyState('W') < 0)
+         if (GetkeyState('W') < 0)
          {
              run = TRUE;
          }
